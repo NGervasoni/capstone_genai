@@ -2,6 +2,10 @@ import subprocess
 
 import json
 
+from sagemaker.predictor import retrieve_default
+endpoint_name = "jumpstart-dft-llama-codellama-13b-i-20240417-060043"
+PREDICTOR = retrieve_default(endpoint_name)
+
 def get_answer(prompt):
     payload = {
         "inputs": prompt,
@@ -13,7 +17,7 @@ def get_answer(prompt):
     }
     print( "========= PAYLOAD =========")
     print("payload = " + json.dumps(payload, indent=4, sort_keys=True))
-    response = predictor.predict(payload)
+    response = PREDICTOR.predict(payload)
     print( "========= ANSWER =========")
     print(response[0]['generated_text'])
     return response
