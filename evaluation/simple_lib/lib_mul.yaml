@@ -1,0 +1,7 @@
+function_name: "lib_mul"
+is_c_code: True
+lib_files:
+  - "/home/sagemaker-user/harnessgeneration/evaluation/simple_lib/src/library.c"
+  - "/home/sagemaker-user/harnessgeneration/evaluation/simple_lib/src/library.h"
+harness: "/home/sagemaker-user/harnessgeneration/evaluation/simple_lib/harnesslib_mul.c"
+harness_bin: "/home/sagemaker-user/harnessgeneration/evaluation/simple_lib/harnesslib_mul"
