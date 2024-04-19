@@ -1,0 +1,10 @@
+function_name: "xmlReadFile"
+is_c_code: True
+lib_files:
+  - "parse1.c"
+  - "library.h"
+compile_command: "afl-gcc-fast ./harness_xmlReadFile.c -I libxml2/include -L libxml2/.libs/ -lz -lm -o harness_xmlReadFile"
+seeds: '/home/sagemaker-user/harnessgeneration/evaluation/new-libxml2/seeds/'
+c_file_path: '/home/sagemaker-user/harnessgeneration/evaluation/new-libxml2/libxml2/parser.c'
+src_folder_path: '/home/sagemaker-user/harnessgeneration/evaluation/new-libxml2/libxml2'
+example: '/home/sagemaker-user/harnessgeneration/evaluation/new-libxml2/libxml2/example/gjobread.c'

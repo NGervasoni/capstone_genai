@@ -10,15 +10,24 @@ def extract_includes(c_file_path, src_folder_path):
     # Initialize Clang index
     index = clang.cindex.Index.create()
     # Parse the C file
-    translation_unit = index.parse(c_file_path, args=['-x', 'c', '-std=c11'])
-    tu = index.parse(c_file_path[:-1]+'h', args=['-x', 'c', '-std=c11'])
-    file_paths = [x.include.name for x in translation_unit.get_includes()] + [x.include.name for x in tu.get_includes()]
+    try:
+        translation_unit = index.parse(c_file_path, args=['-x', 'c', '-std=c11'])
+    except clang.cindex.TranslationUnitLoadError:
+        pass
+    else:
+        file_paths = [x.include.name for x in translation_unit.get_includes()]
+    try:
+        tu = index.parse(c_file_path[:-1]+'h', args=['-x', 'c', '-std=c11'])
+    except clang.cindex.TranslationUnitLoadError:
+        pass
+    else:
+        file_paths = file_paths + [x.include.name for x in tu.get_includes()]
     final_names = [f"#include <{path.split('/')[-1]}>" 
                    if path.startswith('/usr/include') else path for path in file_paths]
     custom_lib = [path for path in final_names if path.startswith(src_folder_path)]
     # return common + "\n".join([f'#include "{path.split("/")[-1]}"'
                    # if path.startswith(src_folder_path) else path for path in final_names]), custom_lib
-    return "/n".join([f'#include "{path.split("/")[-1]}"' for path in custom_lib]), custom_lib
+    return "/n".join([f'#include "{path[len(src_folder_path):]}"' for path in custom_lib]), custom_lib
 
 def generate_initial_prompt(config):
     role = f"You are a developer. you need to write a libFuzzer target for the {config['function_name']} function of your c library."
@@ -60,9 +69,12 @@ def generate_initial_prompt(config):
         with open(l, encoding='utf-8', errors='ignore') as file:
             content = f"\n{l}\n{code_md}\n{file.read()}\n```\n"
         lib_for_prompt = lib_for_prompt + content
-        with open(l[:-1]+'c', encoding='utf-8', errors='ignore') as file: #TODO fix for c++
-            content = f"\n{l[:-1]+'c'}\n{code_md}\n{file.read()}\n```\n"
-        lib_for_prompt = lib_for_prompt + content
+        # try:
+        #     with open(l[:-1]+'c', encoding='utf-8', errors='ignore') as file: #TODO fix for c++
+        #         content = f"\n{l[:-1]+'c'}\n{code_md}\n{file.read()}\n```\n"
+        #     lib_for_prompt = lib_for_prompt + content
+        # except FileNotFoundError:
+        #     pass
     lib_for_prompt = f'''
     ## Library:
     {lib_for_prompt}
