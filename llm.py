@@ -1,4 +1,5 @@
 from sagemaker.predictor import retrieve_default
+import json
 endpoint_name = "jumpstart-dft-llama-codellama-13b-i-20240417-060043"
 PREDICTOR = retrieve_default(endpoint_name)
 
@@ -6,7 +7,7 @@ def get_answer(prompt, verbose=False):
     payload = {
         "inputs": prompt,
         "parameters": {
-            "max_new_tokens": 256,
+            "max_new_tokens": 500,
             "top_p": 0.9,
             "temperature": 0.2
         }

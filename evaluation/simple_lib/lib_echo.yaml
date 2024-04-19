@@ -4,3 +4,5 @@ lib_files:
   - "library.c"
   - "library.h"
 seeds: 'seeds/'
+c_file_path: '/home/sagemaker-user/harnessgeneration/evaluation/simple_lib/src/library.c'
+src_folder_path: '/home/sagemaker-user/harnessgeneration/evaluation/simple_lib/src'
