@@ -15,6 +15,8 @@ def load_config(config_file):
     """
     with open(config_file, 'r') as file:
         config = yaml.safe_load(file)
+    config['harness'] =  f"harness_{config['function_name']}.{'c' if config['is_c_code'] else 'cpp'}"
+    config['harness_bin'] =  f"harness_{config['function_name']}"
     return config
     
 

@@ -1,4 +1,4 @@
-function_name: "lib_mul"
+function_name: "lib_echo"
 is_c_code: True
 lib_files:
   - "library.c"

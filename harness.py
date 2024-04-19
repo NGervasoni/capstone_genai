@@ -15,9 +15,9 @@ def compile(compile_command):
         #     file.write(result.stderr)
         return False, result.stderr
 
-def run_seed():
+def run_seed(config):
     print('checking that does not crash on seed')
-    result = subprocess.run([f'./{HARNESS_BIN}', 'seed/seed'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    result = subprocess.run(['./'+config['harness_bin'], config['seeds']+'seed'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     if result.returncode == 0:
         return True, ""
     else:
@@ -76,3 +76,5 @@ def extract_summary_stats(text):
 
 
     return stats_dict
+
+    return not float(stats['coverage reached'][:-1]) == 0
