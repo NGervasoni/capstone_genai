@@ -4,10 +4,10 @@ sudo apt-get install -y build-essential python3-dev automake cmake git flex biso
 sudo apt-get install -y lld-14 llvm-14 llvm-14-dev clang-14 || sudo apt-get install -y lld llvm llvm-dev clang
 sudo apt-get install -y gcc-$(gcc --version|head -n1|sed 's/\..*//'|sed 's/.* //')-plugin-dev libstdc++-$(gcc --version|head -n1|sed 's/\..*//'|sed 's/.* //')-dev
 sudo apt-get install -y ninja-build # for QEMU mode
-git clone https://github.com/AFLplusplus/AFLplusplus
-cd AFLplusplus
+# git clone https://github.com/AFLplusplus/AFLplusplus
+cd ../AFLplusplus
 make distrib
 sudo make install
 
 sudo apt-get install libclang-dev
-pip install clang
+pip install clang==14

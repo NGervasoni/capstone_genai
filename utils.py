@@ -4,17 +4,6 @@ import yaml
 import clang.cindex
 
 
-def extract_includes(c_file_path, src_folder_path):
-    # Initialize Clang index
-    index = clang.cindex.Index.create()
-    # Parse the C file
-    translation_unit = index.parse(c_file_path, args=['-x', 'c', '-std=c11'])
-    file_paths = [x.include.name for x in translation_unit.get_includes()]
-    final_names = [f"#include <{path.split('/')[-1]}>" 
-                   if path.startswith('/usr/include') else path for path in file_paths]
-    final_names = [f'#include "{path.split("/")[-1]}"'
-                   if path.startswith(src_folder_path) else path for path in final_names]
-    return "\n".join(final_names)
 
 def load_config(config_file):
     """
@@ -30,6 +19,8 @@ def load_config(config_file):
         config = yaml.safe_load(file)
     config['harness'] =  f"harness_{config['function_name']}.{'c' if config['is_c_code'] else 'cpp'}"
     config['harness_bin'] =  f"harness_{config['function_name']}"
+    if config['src_folder_path'][:-1] != '/':
+        config['src_folder_path'] = config['src_folder_path'] + '/'
     return config
     
 
