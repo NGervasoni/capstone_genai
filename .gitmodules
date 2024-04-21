@@ -1,0 +1,3 @@
+[submodule "evaluation/libarchive/libarchive"]
+	path = evaluation/libarchive/libarchive
+	url = https://github.com/libarchive/libarchive.git

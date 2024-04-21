@@ -24,13 +24,57 @@ def run_seed(config):
         print("Errors:", result.stderr)
         return False, result.stderr
         
+# def extract_and_save_harness(llm_res, harness):
+#     lines = llm_res[0]['generated_text'].split('\n')
+#     start_idx = next(i for i, line in enumerate(lines) if '```' in line) + 1
+#     end_idx = next(i for i, line in enumerate(lines) if i > start_idx and '```' in line)
+#     c_code = '\n'.join(lines[start_idx:end_idx])
+#     with open(harness, 'w') as file:
+#         file.write(c_code)
+
 def extract_and_save_harness(llm_res, harness):
-    lines = llm_res[0]['generated_text'].split('\n')
-    start_idx = next(i for i, line in enumerate(lines) if '```' in line) + 1
-    end_idx = next(i for i, line in enumerate(lines) if i > start_idx and '```' in line)
-    c_code = '\n'.join(lines[start_idx:end_idx])
-    with open(harness, 'w') as file:
-        file.write(c_code)
+    """
+    Extracts C code enclosed by ```c```...``` or [C]...[/C] from the provided text and saves it to a file.
+
+    Args:
+    llm_res (dict): Dictionary containing 'generated_text' as one of its keys with the text to extract from.
+    harness (str): File path where the extracted C code should be saved.
+    """
+    text = llm_res[0]['generated_text']
+    c_code = ""
+
+    # Check for ```c or [C] enclosed blocks
+    if '```c' in text:
+        # Extract code between ```c and ```
+        start_marker = '```c'
+        end_marker = '```'
+    elif '[C]' in text:
+        # Extract code between [C] and [/C]
+        start_marker = '[C]'
+        end_marker = '[/C]'
+    elif '```' in text:
+        # Extract code between ```c and ```
+        start_marker = '```'
+        end_marker = '```'
+    else:
+        print("No C code block found.")
+        return
+
+    # Find start and end indices based on identified markers
+    start_idx = text.find(start_marker) + len(start_marker)
+    end_idx = text.find(end_marker, start_idx)
+
+    if start_idx > len(start_marker) - 1 and end_idx != -1:
+        c_code = text[start_idx:end_idx].strip()
+
+    # Save to file
+    if c_code:
+        with open(harness, 'w') as file:
+            file.write(c_code)
+        print(f"C code has been extracted and saved to {harness}")
+    else:
+        print("No C code was extracted.")
+
 
 def extract_summary_stats(text):
     stats_start = text.find('Summary stats')

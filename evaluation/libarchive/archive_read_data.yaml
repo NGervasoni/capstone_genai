@@ -1,0 +1,11 @@
+function_name: "archive_read_data"
+is_c_code: True
+# lib_files:
+#   - "parse1.c"
+#   - "library.h"
+compile_command: "afl-gcc-fast -fsanitize=fuzzer ./harness_archive_read_data.c  -I libarchive/libarchive/ libarchive/.libs/libarchive.a -lz  -lbz2 -lxml2 -lcrypto -lssl -llzma  -llz4 -llzo2 -o harness_archive_read_data"
+seeds: '/home/sagemaker-user/harnessgeneration/evaluation/libarchive/seeds/'
+c_file_path: '/home/sagemaker-user/harnessgeneration/evaluation/libarchive/libarchive/examples/tarfilter.c'
+src_folder_path: '/home/sagemaker-user/harnessgeneration/evaluation/libarchive/libarchive/libarchive'
+example: '/home/sagemaker-user/harnessgeneration/evaluation/libarchive/libarchive/examples/tarfilter.c'
+

@@ -11,3 +11,5 @@ sudo make install
 
 sudo apt-get install libclang-dev
 pip install clang==14
+
+sudo apt-get install -y  m4 automake libbz2-dev libxml2-dev libssl-dev liblzma-dev liblz4-dev liblzo2-dev
